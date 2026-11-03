@@ -1,0 +1,101 @@
+{
+  "_note": "Used by: python report_job.py --due (run it once a day). Three groups = three Excel files, two sheets each: yearly (run on 1 Jan for last year; procedures take the year), quarterly (1 Jan/Apr/Jul/Oct for the quarter just ended; procedures take the first and last day of the quarter), monthly (1st of each month for the month just ended; procedures take the first and last day of the month). Change \"day\" if the data needs a few days to close. Optional per report: \"mail_to\" (list of recipients, default MAIL_TO), \"title\", \"columns\", \"table\", \"hierarchy\", \"period\", \"period_rule\". Not scheduled on purpose: LAISUAT_SPTK (reserve-requirement scenario, run by hand in SSMS). See README.md. \"groups\" gives the file and email name of each group; {period} becomes \"tháng 01/2024\", \"quý IV/2024\" or \"năm 2024\" (the file name uses - instead of /). Snapshot reports (cơ cấu tiền gửi, cơ cấu dư nợ) compare two points in time, so their start date is the last day of the previous quarter: {day_before_from}. Reports that count every day of a range (lãi, phí) start on the first day: {from_date}.",
+  "groups": {
+    "Hằng năm": {
+      "name": "Báo cáo tổng kết {period}"
+    },
+    "Hằng quý": {
+      "name": "Báo cáo định kỳ {period}"
+    },
+    "Hằng tháng": {
+      "name": "Báo cáo tiền gửi không kỳ hạn {period}"
+    }
+  },
+  "reports": [
+    {
+      "sheet": "Tong quan tiet kiem",
+      "proc": "dbo.tiengui_tietkiem1",
+      "params": {
+        "@year": "{year}"
+      },
+      "title": "Báo cáo tổng quan tình hình tiền gửi tiết kiệm trong năm",
+      "schedule": {
+        "frequency": "yearly",
+        "month": 1,
+        "day": 1
+      },
+      "group": "Hằng năm"
+    },
+    {
+      "sheet": "Tong quan tin dung",
+      "proc": "dbo.Bao_cao_tindung",
+      "params": {
+        "@nam": "{year}"
+      },
+      "title": "Báo cáo tổng quan tình hình cấp tín dụng trong năm",
+      "hierarchy": true,
+      "schedule": {
+        "frequency": "yearly",
+        "month": 1,
+        "day": 1
+      },
+      "group": "Hằng năm"
+    },
+    {
+      "sheet": "Co cau tien gui",
+      "proc": "dbo.bao_cao_tiengui_khachhang",
+      "params": {
+        "@ngaybatdau": "{day_before_from}",
+        "@ngayketthuc": "{to_date}"
+      },
+      "title": "Báo cáo cơ cấu tiền gửi chi tiết",
+      "schedule": {
+        "frequency": "quarterly",
+        "day": 1
+      },
+      "group": "Hằng quý"
+    },
+    {
+      "sheet": "Co cau du no",
+      "proc": "dbo.Baocao_duno",
+      "params": {
+        "@ngay_batdau": "{day_before_from}",
+        "@ngay_ketthuc": "{to_date}"
+      },
+      "title": "Báo cáo chi tiết cơ cấu dư nợ tín dụng",
+      "schedule": {
+        "frequency": "quarterly",
+        "day": 1
+      },
+      "group": "Hằng quý"
+    },
+    {
+      "sheet": "Lai TKTT",
+      "proc": "dbo.tinhlai_tiengui_khongkyhan",
+      "params": {
+        "@ngaybatdau": "{from_date}",
+        "@ngayketthuc": "{to_date}"
+      },
+      "title": "Tính lãi tài khoản thanh toán (tiền gửi không kỳ hạn)",
+      "schedule": {
+        "frequency": "monthly",
+        "day": 1
+      },
+      "group": "Hằng tháng"
+    },
+    {
+      "sheet": "Phi duy tri TKTT",
+      "proc": "dbo.tinh_phiduytri_taikhoan",
+      "params": {
+        "@ngaybatdau": "{from_date}",
+        "@ngayketthuc": "{to_date}"
+      },
+      "title": "Phí duy trì tài khoản thanh toán",
+      "schedule": {
+        "frequency": "monthly",
+        "day": 1
+      },
+      "group": "Hằng tháng"
+    }
+  ]
+}

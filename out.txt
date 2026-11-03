@@ -1,0 +1,44 @@
+2026-10-26 05:30:11,351 INFO Starting report for 01/01/2023 - 31/12/2023 (5 sheet(s))
+2026-10-26 05:30:11,382 ERROR Report job failed
+Traceback (most recent call last):
+  File "D:\Banking_basic_business_report\report_job.py", line 530, in main
+    results = fetch_results(cfg, jobs, ctx)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Banking_basic_business_report\report_job.py", line 286, in fetch_results
+    conn = pyodbc.connect(";".join(parts))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pyodbc.InterfaceError: ('28000', "[28000] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Login failed for user 'report_reader'. (18456) (SQLDriverConnect); [28000] [Microsoft][ODBC Driver 17 for SQL Server]Invalid connection string attribute (0); [28000] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Login failed for user 'report_reader'. (18456); [28000] [Microsoft][ODBC Driver 17 for SQL Server]Invalid connection string attribute (0)")
+2026-10-26 05:30:11,461 ERROR Could not send the alert email
+Traceback (most recent call last):
+  File "D:\Banking_basic_business_report\report_job.py", line 530, in main
+    results = fetch_results(cfg, jobs, ctx)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Banking_basic_business_report\report_job.py", line 286, in fetch_results
+    conn = pyodbc.connect(";".join(parts))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pyodbc.InterfaceError: ('28000', "[28000] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Login failed for user 'report_reader'. (18456) (SQLDriverConnect); [28000] [Microsoft][ODBC Driver 17 for SQL Server]Invalid connection string attribute (0); [28000] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Login failed for user 'report_reader'. (18456); [28000] [Microsoft][ODBC Driver 17 for SQL Server]Invalid connection string attribute (0)")
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Banking_basic_business_report\report_job.py", line 472, in send_alert
+    send_message(cfg, msg, recipients=cfg.alert_to)
+  File "D:\Banking_basic_business_report\report_job.py", line 447, in send_message
+    with smtplib.SMTP(cfg.smtp_host, cfg.smtp_port, timeout=60) as server:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\python\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\python\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\python\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\python\Lib\socket.py", line 827, in create_connection
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\python\Lib\socket.py", line 962, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
